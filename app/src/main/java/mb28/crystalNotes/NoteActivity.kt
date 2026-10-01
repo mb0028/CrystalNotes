@@ -198,17 +198,7 @@ class NoteActivity : ComponentActivity() {
                     Tab(
                         i == currentTab,
                         { currentTab = i },
-                        text = {
-                            Row(
-                                Modifier.height(30.dp).offset((-10).dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                IconButton(
-                                    { editPopup = true },
-                                ) { Text(note.tabIcons[i]) }
-                                Text(tabName)
-                            }
-                        }
+                        text = { Text(tabName) }
                     )
 
                     if (editPopup) {
