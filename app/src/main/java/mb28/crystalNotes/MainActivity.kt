@@ -15,12 +15,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -40,7 +44,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mb28.crystalNotes.core.Note
 import mb28.crystalNotes.core.Settings
+import mb28.crystalNotes.ui.NewNotePopup
 import mb28.crystalNotes.ui.theme.CrystalNotesTheme
+import mb28.monoP.icons.add_2
 import java.io.File
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -57,7 +63,32 @@ class MainActivity : ComponentActivity() {
             CrystalNotesTheme {
                 Scaffold(
                     Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    topBar = {
+                        TopAppBar(
+                            { Text("Notes") },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                MaterialTheme.colorScheme.secondaryContainer
+                            ),
+                            actions = {
+                                var newPopup by remember { mutableStateOf(false) }
+                                IconButton(
+                                    { newPopup = true },
+                                ) { Icon(add_2, null) }
+
+                                if (newPopup) {
+                                    NewNotePopup {
+                                        newPopup = false
+                                        if (it != null) {
+                                            val intent = Intent(this@MainActivity, NoteActivity::class.java)
+                                                .putExtra(EXTRA_PATH, it)
+                                            startActivity(intent)
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
                 ) { paddingValues ->
                     when {
                         !allFileAccessGranted -> {
@@ -127,7 +158,8 @@ class MainActivity : ComponentActivity() {
 
                             LazyColumn(
                                 Modifier.fillMaxSize().padding(10.dp),
-                                contentPadding = paddingValues
+                                contentPadding = paddingValues,
+                                verticalArrangement = Arrangement.Bottom
                             ) {
                                 val count = notes.count()
                                 items(count) { i ->

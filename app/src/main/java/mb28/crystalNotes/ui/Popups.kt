@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import mb28.crystalNotes.core.Note
+import mb28.crystalNotes.core.Settings
+import java.io.File
 
 @Composable
 fun NewTabPopup(note: Note, onDismiss: (Boolean) -> Unit) {
@@ -68,6 +70,53 @@ fun NewTabPopup(note: Note, onDismiss: (Boolean) -> Unit) {
                     }
                 )
             }
+        }
+    )
+}
+
+
+@Composable
+fun NewNotePopup(onDismiss: (String?) -> Unit) {
+    var name by remember { mutableStateOf("New note") }
+    AlertDialog(
+        { onDismiss(null) },
+        {
+            Button({
+                val path = "${Settings.appDir}/$name.${Note.EXTENSION}"
+                if (!File(path).exists()) {
+                    val note = Note().apply {
+                        this.name.value = name
+                        this.path = path
+                        saveChanges()
+                    }
+                    onDismiss(note.path)
+                } else {
+                    onDismiss(null)
+                }
+
+            }) {
+                Text("Create")
+            }
+        },
+        Modifier.fillMaxWidth(),
+        dismissButton = {
+            OutlinedButton({ onDismiss(null) }) {
+                Text("Cancel")
+            }
+        },
+        title = {
+            Text("Create New Note")
+        },
+        text = {
+            OutlinedTextField(
+                name,
+                {name = it},
+                Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                label = {
+                    Text("Name")
+                }
+            )
         }
     )
 }

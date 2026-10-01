@@ -218,15 +218,3 @@ class NoteActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
