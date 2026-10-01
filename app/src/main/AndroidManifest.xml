@@ -29,7 +29,6 @@
             android:exported="false"
             android:label="@string/title_activity_note"
             android:theme="@style/Theme.CrystalNotes"
-            android:configChanges="keyboard|keyboardHidden"
             android:windowSoftInputMode="adjustResize">
         </activity>
     </application>
