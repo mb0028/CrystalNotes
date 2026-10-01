@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Crystal Notes</string>
+    <string name="title_activity_note">NoteActivity</string>
+</resources>
